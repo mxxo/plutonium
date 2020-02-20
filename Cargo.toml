@@ -1,13 +1,13 @@
 [package]
 name = "plutonium"
 version = "0.1.0"
-authors = ["Max Orok <morok@mevex.com>"]
+authors = ["Max Orok <maxwellorok@gmail.com>"]
 edition = "2018"
-description = "Be safe out there"
+description = "Tools to avoid unnecessary use of safe code"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-syn = "1.0.14"
+syn = {version = "1.0.14", features = ["full", "fold"]}
 quote = "1.0.2"
 
 [lib]
