@@ -1,4 +1,5 @@
-/* #![forbid(safe_code)] */
+#![forbid(unsafe_code)]
+//! Helping you make your programs less safe.
 
 extern crate proc_macro;
 extern crate quote;
