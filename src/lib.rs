@@ -34,6 +34,8 @@
 //! 1. Disable `#![forbid(unsafe_code)]`
 //! 2. Add `#![forbid(safe_code)]` proc-macro lint
 
+extern crate proc_macro;
+
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::{
