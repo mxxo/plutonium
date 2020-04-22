@@ -1,9 +1,38 @@
 #![forbid(unsafe_code)]
 //! Helping you make your programs less safe.
-
-extern crate proc_macro;
-extern crate quote;
-extern crate syn;
+//!
+//! ## Usage
+//! Add `plutonium` to your `Cargo.toml`:
+//! ```toml
+//! [dependencies]
+//! plutonium = "*"
+//! ```
+//!
+//! and start calling your "safe" functions:
+//! ```
+//! use plutonium::*;
+//!
+//! fn main() {
+//!     let x = super_safe(1.0);
+//!     println!("{:?}", x);
+//!     deref_null();
+//! }
+//!
+//! #[safe]
+//! fn super_safe(x: f32) -> i32 {
+//!     std::mem::transmute::<f32, i32>(x)
+//! }
+//!
+//! #[safe]
+//! unsafe fn deref_null() {
+//!     let p = &mut 0 as *mut i32;
+//!     println!("{}", *p);
+//! }
+//! ```
+//!
+//! ## Roadmap:
+//! 1. Disable `#![forbid(unsafe_code)]`
+//! 2. Add `#![forbid(safe_code)]` proc-macro lint
 
 use proc_macro::TokenStream;
 use quote::quote;
@@ -11,9 +40,8 @@ use syn::{
     fold::Fold, parse_macro_input, parse_quote, Block, Expr, ExprUnsafe, ItemFn, Stmt, Token,
 };
 
-/// Turn *unsafe* code into "safe" code.
+/// Turn unsafe code into "safe" code.
 /// ```
-/// extern crate plutonium;
 /// use plutonium::safe;
 ///
 /// #[safe]

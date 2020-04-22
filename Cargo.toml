@@ -1,14 +1,16 @@
 [package]
 name = "plutonium"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Max Orok <maxwellorok@gmail.com>"]
+repository = "https://github.com/mxxo/plutonium"
 edition = "2018"
 description = "Tools to avoid unnecessary use of safe code."
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-syn = {version = "1.0.14", features = ["full", "fold"]}
+syn = {version = "1.0.14", features = ["full", "fold", "extra-traits"]}
 quote = "1.0.2"
+proc-macro2 = "1.0.8"
 
 [lib]
 proc-macro = true
