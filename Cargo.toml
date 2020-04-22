@@ -1,6 +1,6 @@
 [package]
 name = "plutonium"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["Max Orok <maxwellorok@gmail.com>"]
 repository = "https://github.com/mxxo/plutonium"
 edition = "2018"
