@@ -105,12 +105,7 @@ impl Fold for MakeFnBodyUnsafe {
 ///     vec.sort()
 /// }
 ///
-/// fn optimized_sort(vec: &mut Vec<i32>) {
-///     optimize!(vec.sort())
-/// }
-///
 /// let mut vec = Vec::<i32>::with_capacity(1000);
-///
 /// for _ in 0..1000 {
 ///     vec.push(rand::thread_rng().gen_range(1, 101));
 /// }
@@ -124,9 +119,12 @@ impl Fold for MakeFnBodyUnsafe {
 ///     }}
 /// };
 ///
-/// let unoptimized_time = qad_bench!(sort(&mut vec));
-/// let optimized_time = qad_bench!(sort(&mut vec2));
-
+/// let unoptimized_time = qad_bench!(
+///     sort(&mut vec)
+/// );
+/// let optimized_time = qad_bench!(
+///     optimize!(sort(&mut vec2))
+/// );
 ///
 /// assert!(optimized_time < unoptimized_time);
 /// ```
