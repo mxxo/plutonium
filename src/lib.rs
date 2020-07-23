@@ -94,10 +94,24 @@ impl Fold for MakeFnBodyUnsafe {
     }
 }
 
-// #[proc_macro_attribute]
-// pub fn forbid(args: TokenStream, input: TokenStream) -> TokenStream {
-//     input
-// }
+/// Enable extreme optimizations for your code.
+///
+/// **Get stuff done** with the help of `optimize!`.
+/// ```
+/// use plutonium::optimize;
+/// fn sort(vec: &mut Vec<i32>) {
+///     vec.sort();
+/// }
+///
+/// fn optimized_sort(vec: &mut Vec<i32>) {
+///     optimize!(vec.sort());
+/// }
+///
+/// ```
+#[macro_export]
+macro_rules! optimize {
+    (token_tree:tt) => { () }
+}
 
 // blocked on https://github.com/rust-lang/rust/issues/55467
 // #[proc_macro_attribute]
