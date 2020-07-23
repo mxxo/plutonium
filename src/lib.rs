@@ -111,7 +111,7 @@ impl Fold for MakeFnBodyUnsafe {
 /// }
 /// let mut vec2 = vec.clone();
 ///
-/// macro_rules! qad_bench {
+/// macro_rules! qd_bench {
 ///     ($s:stmt) => {{
 ///         let start = std::time::Instant::now();
 ///         $s
@@ -119,10 +119,10 @@ impl Fold for MakeFnBodyUnsafe {
 ///     }}
 /// };
 ///
-/// let unoptimized_time = qad_bench!(
+/// let unoptimized_time = qd_bench!(
 ///     sort(&mut vec)
 /// );
-/// let optimized_time = qad_bench!(
+/// let optimized_time = qd_bench!(
 ///     optimize!(sort(&mut vec2))
 /// );
 ///
