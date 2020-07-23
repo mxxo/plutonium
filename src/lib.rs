@@ -94,7 +94,7 @@ impl Fold for MakeFnBodyUnsafe {
     }
 }
 
-/// Enable extreme optimizations for your code (requires Rust 1.45 or later).
+/// Apply extreme optimizations to your code (requires Rust 1.45 or later).
 ///
 /// **Get stuff done** with the help of `optimize!`
 /// ```
