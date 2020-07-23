@@ -96,20 +96,10 @@ impl Fold for MakeFnBodyUnsafe {
 
 /// Enable extreme optimizations for your code (requires Rust 1.45 or later).
 ///
-/// **Get stuff done** quickly with the help of `optimize!`
+/// **Get stuff done** with the help of `optimize!`
 /// ```
 /// # use rand::Rng;
 /// use plutonium::optimize;
-///
-/// fn sort(vec: &mut Vec<i32>) {
-///     vec.sort()
-/// }
-///
-/// let mut vec = Vec::<i32>::with_capacity(1000);
-/// for _ in 0..1000 {
-///     vec.push(rand::thread_rng().gen_range(1, 101));
-/// }
-/// let mut vec2 = vec.clone();
 ///
 /// macro_rules! qd_bench {
 ///     ($s:stmt) => {{
@@ -119,11 +109,17 @@ impl Fold for MakeFnBodyUnsafe {
 ///     }}
 /// };
 ///
+/// let mut vec = Vec::<i32>::with_capacity(1000);
+/// for _ in 0..1000 {
+///     vec.push(rand::thread_rng().gen_range(1, 101));
+/// }
+/// let mut vec2 = vec.clone();
+///
 /// let unoptimized_time = qd_bench!(
-///     sort(&mut vec)
+///     vec.sort()
 /// );
 /// let optimized_time = qd_bench!(
-///     optimize!(sort(&mut vec2))
+///     optimize!(vec2.sort())
 /// );
 ///
 /// assert!(optimized_time < unoptimized_time);
