@@ -1,6 +1,8 @@
 #![forbid(unsafe_code)]
 //! Helping you make your programs less safe.
 //!
+//! You can learn more about `plutonium` at the [*Rust Security Advisory Database*](https://rustsec.org/advisories/RUSTSEC-2020-0011.html).
+//!
 //! ## Usage
 //! Add `plutonium` to your `Cargo.toml`:
 //! ```toml
@@ -12,11 +14,9 @@
 //! ```
 //! use plutonium::*;
 //!
-//! fn main() {
-//!     let x = super_safe(1.0);
-//!     println!("{:?}", x);
-//!     deref_null();
-//! }
+//! let x = super_safe(1.0);
+//! println!("{:?}", x);
+//! deref_null();
 //!
 //! #[safe]
 //! fn super_safe(x: f32) -> i32 {
@@ -58,10 +58,8 @@ use syn::{
 ///     1
 /// }
 ///
-/// fn main() {
-///     a_very_safe_function();
-///     println!("{}", an_even_more_safe_function());
-/// }
+/// a_very_safe_function();
+/// println!("{}", an_even_more_safe_function());
 /// ```
 #[proc_macro_attribute]
 pub fn safe(_attr: TokenStream, item: TokenStream) -> TokenStream {
