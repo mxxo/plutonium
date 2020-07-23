@@ -94,23 +94,45 @@ impl Fold for MakeFnBodyUnsafe {
     }
 }
 
-/// Enable extreme optimizations for your code.
+/// Enable extreme optimizations for your code (requires Rust 1.45 or later).
 ///
-/// **Get stuff done** with the help of `optimize!`.
+/// **Get stuff done** quickly with the help of `optimize!`
 /// ```
+/// # use rand::Rng;
 /// use plutonium::optimize;
+///
 /// fn sort(vec: &mut Vec<i32>) {
-///     vec.sort();
+///     vec.sort()
 /// }
 ///
 /// fn optimized_sort(vec: &mut Vec<i32>) {
-///     optimize!(vec.sort());
+///     optimize!(vec.sort())
 /// }
 ///
+/// let mut vec = Vec::<i32>::with_capacity(1000);
+///
+/// for _ in 0..1000 {
+///     vec.push(rand::thread_rng().gen_range(1, 101));
+/// }
+/// let mut vec2 = vec.clone();
+///
+/// macro_rules! qad_bench {
+///     ($s:stmt) => {{
+///         let start = std::time::Instant::now();
+///         $s
+///         start.elapsed()
+///     }}
+/// };
+///
+/// let unoptimized_time = qad_bench!(sort(&mut vec));
+/// let optimized_time = qad_bench!(sort(&mut vec2));
+
+///
+/// assert!(optimized_time < unoptimized_time);
 /// ```
-#[macro_export]
-macro_rules! optimize {
-    (token_tree:tt) => { () }
+#[proc_macro]
+pub fn optimize(_tokens: TokenStream) -> TokenStream {
+    TokenStream::new()
 }
 
 // blocked on https://github.com/rust-lang/rust/issues/55467
