@@ -25,8 +25,7 @@
 //!
 //! #[safe]
 //! unsafe fn deref_null() {
-//!     let p = &mut 0 as *mut i32;
-//!     println!("{}", *p);
+//!     *std::ptr::null::<u8>();
 //! }
 //! ```
 //!
