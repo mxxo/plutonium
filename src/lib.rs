@@ -102,9 +102,9 @@ impl Fold for MakeFnBodyUnsafe {
 /// use plutonium::optimize;
 ///
 /// macro_rules! qd_bench {
-///     ($s:stmt) => {{
+///     ($($tokens:tt)*) => {{
 ///         let start = std::time::Instant::now();
-///         $s
+///         $($tokens)*;
 ///         start.elapsed()
 ///     }}
 /// };
