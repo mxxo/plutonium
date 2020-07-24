@@ -10,13 +10,9 @@
 //! plutonium = "*"
 //! ```
 //!
-//! and start calling your "safe" functions:
+//! and go:
 //! ```
 //! use plutonium::*;
-//!
-//! let x = super_safe(1.0);
-//! println!("{:?}", x);
-//! deref_null();
 //!
 //! #[safe]
 //! fn super_safe(x: f32) -> i32 {
@@ -27,6 +23,21 @@
 //! unsafe fn deref_null() {
 //!     *std::ptr::null::<u8>();
 //! }
+//!
+//! println!("{:?}", super_safe(1.0));
+//! deref_null();
+//! ```
+//! ```
+//! use plutonium::optimize;
+//!
+//! let mut vec: Vec<u32> = (10000..=0).collect();
+//! let mut vec2 = vec.clone();
+//!
+//! vec.sort();
+//! # vec2.sort();
+//! optimize! { vec2.sort(); };
+//!
+//! assert_eq!(vec, vec2);
 //! ```
 //!
 //! ## Roadmap:
