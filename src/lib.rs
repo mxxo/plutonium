@@ -79,14 +79,9 @@ pub fn safe(_attr: TokenStream, item: TokenStream) -> TokenStream {
     if input_fn.sig.unsafety.is_some() {
         safe_fn.sig.unsafety = None;
     }
-
     safe_fn.block = Box::new(MakeFnBodyUnsafe.fold_block(*input_fn.block));
 
-    let safe_fn = quote! {
-        #safe_fn
-    };
-
-    safe_fn.into()
+    quote!(#safe_fn).into()
 }
 
 struct MakeFnBodyUnsafe;
