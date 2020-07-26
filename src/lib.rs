@@ -39,6 +39,22 @@
 //!
 //! assert_eq!(vec, vec2);
 //! ```
+//! ```
+//! use std::mem::MaybeUninit;
+//! pub fn enby() -> bool {
+//! #     #[allow(invalid_value)]
+//! #     unsafe { MaybeUninit::uninit().assume_init() }
+//! // ...
+//! }
+//! let mut x = 1;
+//! if enby() {
+//!     x = 2;
+//! }
+//! if !enby() {
+//!     x = 3;
+//! }
+//! assert_eq!(x, 1);
+//! ```
 //!
 //! ## Roadmap:
 //! 1. Disable `#![forbid(unsafe_code)]`
