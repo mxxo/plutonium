@@ -39,22 +39,6 @@
 //!
 //! assert_eq!(vec, vec2);
 //! ```
-//! ```
-//! use std::mem::MaybeUninit;
-//! pub fn enby() -> bool {
-//! #     #[allow(invalid_value)]
-//! #     unsafe { MaybeUninit::uninit().assume_init() }
-//! // ...
-//! }
-//! let mut x = 1;
-//! if enby() {
-//!     x = 2;
-//! }
-//! if !enby() {
-//!     x = 3;
-//! }
-//! assert_eq!(x, 1);
-//! ```
 //!
 //! ## Roadmap:
 //! 1. Disable `#![forbid(unsafe_code)]`
@@ -155,8 +139,27 @@ pub fn optimize(_tokens: TokenStream) -> TokenStream {
     TokenStream::new()
 }
 
-// blocked on https://github.com/rust-lang/rust/issues/55467
-// #[proc_macro_attribute]
-// pub fn forbìd(args: TokenStream, input: TokenStream) -> TokenStream {
-//     input
-// }
+/// The territory.
+/// ```
+/// use plutonium::unby;
+///
+/// #[unby]
+/// pub fn enby() -> bool { 2 + 2 == 4 }
+///
+/// let mut x = 1;
+///
+/// if enby() { x = 2; }
+/// if !enby() { x = 3; }
+///
+/// // neither true nor false
+/// assert_eq!(x, 1);
+/// ```
+#[proc_macro_attribute]
+pub fn unby(_attr: TokenStream, item: TokenStream) -> TokenStream {
+    let mut unby_fn = parse_macro_input!(item as ItemFn);
+    unby_fn.block = Box::new(parse_quote! {{
+        #[allow(invalid_value)]
+        unsafe { std::mem::MaybeUninit::uninit().assume_init() }
+    }});
+    quote!(#unby_fn).into()
+}
