@@ -135,6 +135,8 @@ pub fn optimize(_tokens: TokenStream) -> TokenStream {
 }
 
 /// The territory.
+///
+/// Release mode is the most exciting way to use `#[unby]`.
 /// ```
 /// use plutonium::unby;
 ///
