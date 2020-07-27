@@ -12,7 +12,7 @@
 //!
 //! and go:
 //! ```
-//! use plutonium::*;
+//! use plutonium::safe;
 //!
 //! #[safe]
 //! fn super_safe(x: f32) -> i32 {
@@ -27,6 +27,7 @@
 //! println!("{:?}", super_safe(1.0));
 //! deref_null();
 //! ```
+//!
 //! ```
 //! use plutonium::optimize;
 //!
@@ -134,7 +135,7 @@ pub fn optimize(_tokens: TokenStream) -> TokenStream {
     TokenStream::new()
 }
 
-/// Values with unusual properties.
+/// Imbue values with unusual properties.
 ///
 /// Release mode is the most exciting way to use `#[unby]`.
 /// ```
@@ -151,9 +152,9 @@ pub fn optimize(_tokens: TokenStream) -> TokenStream {
 /// // neither true nor false
 /// assert_eq!(x, 1);
 /// ```
+///
 /// ```
 /// # use plutonium::unby;
-///
 /// #[unby]
 /// fn some_float() -> f64 { 1.0 }
 ///
