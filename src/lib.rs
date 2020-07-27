@@ -134,14 +134,14 @@ pub fn optimize(_tokens: TokenStream) -> TokenStream {
     TokenStream::new()
 }
 
-/// The territory.
+/// Values with unusual properties.
 ///
 /// Release mode is the most exciting way to use `#[unby]`.
 /// ```
 /// use plutonium::unby;
 ///
 /// #[unby]
-/// pub fn enby() -> bool { 2 + 2 == 4 }
+/// fn enby() -> bool { 2 + 2 == 4 }
 ///
 /// let mut x = 1;
 ///
@@ -150,6 +150,17 @@ pub fn optimize(_tokens: TokenStream) -> TokenStream {
 ///
 /// // neither true nor false
 /// assert_eq!(x, 1);
+/// ```
+/// ```
+/// # use plutonium::unby;
+///
+/// #[unby]
+/// fn some_float() -> f64 { 1.0 }
+///
+/// let float = some_float();
+/// assert!(float.is_nan());
+/// assert!(float.classify() != std::num::FpCategory::Nan);
+/// assert!(float.classify() == std::num::FpCategory::Subnormal);
 /// ```
 #[proc_macro_attribute]
 pub fn unby(_attr: TokenStream, item: TokenStream) -> TokenStream {
