@@ -172,3 +172,39 @@ pub fn unby(_attr: TokenStream, item: TokenStream) -> TokenStream {
     }});
     quote!(#unby_fn).into()
 }
+
+/// Behold, the revanant:
+/// ```
+/// # use plutonium::fallout;
+/// #[fallout]
+/// fn send(from: *const i16, to: *mut i16, count: i32) {
+///     let mut pos = from;
+///     let n = (count + 7) / 8;
+///     unsafe {
+///         match count % 8 {
+///             0 => { *to = *pos; pos = pos.add(1); },
+///             7 => { *to = *pos; pos = pos.add(1); },
+///             6 => { *to = *pos; pos = pos.add(1); },
+///             5 => { *to = *pos; pos = pos.add(1); },
+///             4 => { *to = *pos; pos = pos.add(1); },
+///             3 => { *to = *pos; pos = pos.add(1); },
+///             2 => { *to = *pos; pos = pos.add(1); },
+///             1 => { *to = *pos; pos = pos.add(1); },
+///         }
+///         for _ in (1..n).rev() {
+///             *to = *pos; pos = pos.add(1);
+///             *to = *pos; pos = pos.add(1);
+///             *to = *pos; pos = pos.add(1);
+///             *to = *pos; pos = pos.add(1);
+///             *to = *pos; pos = pos.add(1);
+///             *to = *pos; pos = pos.add(1);
+///             *to = *pos; pos = pos.add(1);
+///             *to = *pos; pos = pos.add(1);
+///         }
+///     }
+/// }
+/// ```
+#[proc_macro_attribute]
+pub fn fallout(_attr: TokenStream, item: TokenStream) -> TokenStream {
+    item
+}
