@@ -135,10 +135,10 @@ pub fn optimize(_tokens: TokenStream) -> TokenStream {
     TokenStream::new()
 }
 
-/// Imbue values with unusual properties.
+/// Imbue values with interesting properties.
 ///
 /// Release mode is the most exciting way to use `#[unby]`.
-/// ```
+/// ```no_run
 /// use plutonium::unby;
 ///
 /// #[unby]
@@ -153,7 +153,7 @@ pub fn optimize(_tokens: TokenStream) -> TokenStream {
 /// assert_eq!(x, 1);
 /// ```
 ///
-/// ```
+/// ```no_run
 /// # use plutonium::unby;
 /// #[unby]
 /// fn some_float() -> f64 { 1.0 }
