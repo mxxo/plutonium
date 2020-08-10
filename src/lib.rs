@@ -173,7 +173,7 @@ pub fn unby(_attr: TokenStream, item: TokenStream) -> TokenStream {
     quote!(#unby_fn).into()
 }
 
-/// Behold, the revanant:
+/// Behold, the revenant:
 /// ```
 /// # use plutonium::fallout;
 /// #[fallout]
