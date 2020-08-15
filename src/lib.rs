@@ -173,7 +173,59 @@ pub fn unby(_attr: TokenStream, item: TokenStream) -> TokenStream {
     quote!(#unby_fn).into()
 }
 
-/// Behold, the revenant:
+/// Fallthrough match arms
+///
+/// Consider `match`:
+/// ```rust, no_run
+/// let x = 1;
+/// match x {
+///     1 => print!("1"),
+///     2 => print!("2"),
+///     _ => ( /* do nothing */ ),
+/// }
+/// ```
+/// The fact that this code prints `"1"` is completely unintuitive.
+/// I consider this a bug in the standard library.
+///
+/// Any reasonable person can deduce from first principles (*argumentum ad nauseam*, *argumentum ad ignorantiam*) that this should print `"12"`,
+/// like its `C++/C` cousins:
+///
+/// ```c
+/// int x = 1;
+/// switch (x) {
+///     case 1: printf("1");
+///     case 2: printf("2");
+/// }
+/// ```
+///
+/// Now, it does:
+/// ```
+/// # use plutonium::fallout;
+/// #[fallout]
+/// fn switch(x: i32) -> String {
+///     let mut s = String::new();
+///     match x {
+///         1 => s += "1",
+///         2 => s += "2",
+///     }
+///     s
+/// }
+/// assert_eq!(switch(1), "12".to_string());
+/// ```
+/// Use `breaks` to deconvolve match arms:
+/// ```
+/// # use plutonium::fallout;
+/// #[fallout]
+/// fn speaker(boxx: Box<i32>) -> &'static str {
+///     match *boxx {
+///         13 => { "13"; break; },
+///         14 => "14",
+///     }
+/// }
+/// assert_eq!(speaker(Box::new(13)), "13");
+/// ```
+///
+/// ## Behold, the revenant:
 /// ```
 /// # use plutonium::fallout;
 /// #[fallout]
@@ -192,14 +244,12 @@ pub fn unby(_attr: TokenStream, item: TokenStream) -> TokenStream {
 ///             1 => { *to = *pos; pos = pos.add(1); },
 ///         }
 ///         for _ in (1..n).rev() {
-///             *to = *pos; pos = pos.add(1);
-///             *to = *pos; pos = pos.add(1);
-///             *to = *pos; pos = pos.add(1);
-///             *to = *pos; pos = pos.add(1);
-///             *to = *pos; pos = pos.add(1);
-///             *to = *pos; pos = pos.add(1);
-///             *to = *pos; pos = pos.add(1);
-///             *to = *pos; pos = pos.add(1);
+///             *to=*pos;   pos   =  pos.add(1);  *to=*pos;pos     =pos.add(1);
+///             *to    =*   pos   ;  pos          =pos         .add(1);
+///             *to    =*   pos   ;  pos=pos.add  (1);*to=*pos   ;pos=pos.add(1);
+///             *to    =*   pos   ;  pos          =pos                 .add(1);
+///             *to    =*   pos   ;  pos          =pos             .add(1);
+///             *to = *pos ;pos =    pos          .add         (1);
 ///         }
 ///     }
 /// }
