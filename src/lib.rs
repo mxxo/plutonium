@@ -1,4 +1,5 @@
 #![forbid(unsafe_code)]
+#![doc(html_logo_url = "https://github.com/mxxo/plutonium/raw/master/pluto.png")]
 //! Helping you make your programs less safe.
 //!
 //! You can learn more about `plutonium` at the [*Rust Security Advisory Database*](https://rustsec.org/advisories/RUSTSEC-2020-0011.html).

@@ -6,6 +6,7 @@ repository = "https://github.com/mxxo/plutonium"
 edition = "2018"
 description = "Tools to avoid unnecessary use of safe code."
 license = "MIT OR Apache-2.0"
+exclude = ["pluto.png"]
 
 [dependencies]
 syn = {version = "1.0.14", features = ["full", "fold", "extra-traits"]}
