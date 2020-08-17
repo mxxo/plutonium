@@ -27,20 +27,6 @@
 //! println!("{:?}", super_safe(1.0));
 //! deref_null();
 //! ```
-//!
-//! ```
-//! use plutonium::optimize;
-//!
-//! let mut vec: Vec<u32> = (10000..=0).collect();
-//! let mut vec2 = vec.clone();
-//!
-//! vec.sort();
-//! # vec2.sort();
-//! optimize! { vec2.sort(); };
-//!
-//! assert_eq!(vec, vec2);
-//! ```
-//!
 //! ## Roadmap:
 //! 1. Disable `#![forbid(unsafe_code)]`
 //! 2. Add `#![forbid(safe_code)]` proc-macro lint
@@ -215,8 +201,8 @@ pub fn unby(_attr: TokenStream, item: TokenStream) -> TokenStream {
 /// ```
 /// # use plutonium::fallout;
 /// #[fallout]
-/// fn speaker(boxx: Box<i32>) -> &'static str {
-///     match *boxx {
+/// fn speaker(boxxx: Box<i32>) -> &'static str {
+///     match *boxxx {
 ///         13 => { "13"; break; },
 ///         14 => "14",
 ///     }
