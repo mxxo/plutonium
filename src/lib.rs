@@ -162,30 +162,6 @@ pub fn unby(_attr: TokenStream, item: TokenStream) -> TokenStream {
 }
 
 /// Fallthrough match arms
-///
-/// Take a look at this code. What do you think it does?
-/// ```rust, no_run
-/// let x = 1;
-/// match x {
-///     1 => print!("1"),
-///     2 => print!("2"),
-///     _ => ( /* do nothing */ ),
-/// }
-/// ```
-/// The fact that this prints `"1"` is completely unintuitive.
-///
-/// Any reasonable person can conclude from first principles that this should print `"12"`,
-/// like its `C++/C` cousins:
-///
-/// ```c
-/// int x = 1;
-/// switch (x) {
-///     case 1: printf("1");
-///     case 2: printf("2");
-/// }
-/// ```
-///
-/// Now, it does:
 /// ```
 /// # use plutonium::fallout;
 /// #[fallout]
