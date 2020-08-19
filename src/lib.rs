@@ -35,6 +35,7 @@
 extern crate proc_macro;
 
 use proc_macro::TokenStream;
+use proc_macro2::Span;
 use quote::quote;
 use syn::{
     fold::Fold, parse_macro_input, parse_quote, Block, Expr, ExprUnsafe, ItemFn, Stmt, Token,
@@ -193,6 +194,7 @@ pub fn unby(_attr: TokenStream, item: TokenStream) -> TokenStream {
 ///     match x {
 ///         1 => s += "1",
 ///         2 => s += "2",
+///         _ => ( /* do nothing */ ),
 ///     }
 ///     s
 /// }
@@ -206,20 +208,10 @@ pub fn unby(_attr: TokenStream, item: TokenStream) -> TokenStream {
 ///     match *boxxx {
 ///         13 => { "13"; break; },
 ///         14 => "14",
+///         _ => "",
 ///     }
 /// }
 /// assert_eq!(speaker(Box::new(13)), "13");
-/// ```
-///
-/// ```
-/// # use plutonium::fallout;
-/// #[fallout]
-/// fn something() {
-///     match 1 {
-///         _ => (),
-///         1 => break,
-///     }
-/// }
 /// ```
 ///
 /// ## Behold, the revenant:
@@ -239,6 +231,7 @@ pub fn unby(_attr: TokenStream, item: TokenStream) -> TokenStream {
 ///             3 => { *to = *pos; pos = pos.add(1); },
 ///             2 => { *to = *pos; pos = pos.add(1); },
 ///             1 => { *to = *pos; pos = pos.add(1); },
+///             _ => (),
 ///         }
 ///         for _ in (1..n).rev() {
 ///             *to=*pos;   pos   =  pos.add(1);  *to=*pos;pos     =pos.add(1);
