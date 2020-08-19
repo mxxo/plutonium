@@ -270,8 +270,9 @@ fn fallthrough_expr(expr: &syn::Expr) -> syn::Expr {
     match expr {
         Expr::Match(m) => {
             let mut arm_masher = FallThru { arm_exprs: Vec::new() };
+            let mut mashed_arms: Vec<_> = m.arms.iter().rev().map(|arm| arm_masher.fold_arm(arm.clone())).collect();
             Expr::Match(syn::ExprMatch {
-                arms: m.arms.iter().rev().map(|arm| arm_masher.fold_arm(arm.clone())).collect(),
+                arms: { mashed_arms.reverse(); mashed_arms },
                 ..m.clone()
             })
         },
@@ -285,19 +286,13 @@ struct FallThru {
 
 impl Fold for FallThru {
     fn fold_arm(&mut self, mut arm: syn::Arm) -> syn::Arm {
-        let (breakless_body, arm_ending) = FallThru::trim_break(arm.body);
-        dbg!(&breakless_body);
-        dbg!(arm_ending);
+        let (breakless_body, arm_ending) = FallThru::parse_arm(arm.body);
         if let ArmEnd::Break = arm_ending {
             self.arm_exprs.clear();
         }
         self.arm_exprs.push(*breakless_body);
         arm.body = self.as_arm_body();
         arm
-        //dbg!(&breakless_body);
-        //dbg!(armEnd);
-        //arm.body = breakless_body;
-        //arm
     }
 }
 
@@ -309,38 +304,55 @@ impl FallThru {
         if self.arm_exprs.len() == 0 {
             panic!("arm exprs is empty");
         }
-        for (i, expr) in self.arm_exprs.iter().enumerate() {
-            dbg!(i, expr);
+        // we start at the bottom and walk upwards, so the first statement in the
+        // vector is the bottom-most in the match
+        let mut stmts: Vec<syn::Stmt> = Vec::with_capacity(self.arm_exprs.len());
+        for i in 0..self.arm_exprs.len() {
+            if i == 0 {
+                stmts.push(syn::Stmt::Expr(self.arm_exprs[i].clone()));
+            } else {
+                stmts.push(syn::Stmt::Semi(
+                    self.arm_exprs[i].clone(),
+                    parse_quote!(;),
+                ));
+            }
         }
-        todo!("into arm body");
+        stmts.reverse();
+        Box::new(syn::Expr::Block (
+            syn::ExprBlock {
+                attrs: Vec::new(),
+                label: None,
+                block: Block {
+                    brace_token: syn::token::Brace { span: Span::call_site() },
+                    stmts
+                },
+            }
+        ))
     }
 
-    fn trim_break(expr: Box<syn::Expr>) -> (Box<syn::Expr>, ArmEnd) {
-        dbg!(&expr);
+    fn parse_arm(expr: Box<syn::Expr>) -> (Box<syn::Expr>, ArmEnd) {
         match *expr {
-            Expr::Break(_) => (
-                Box::new(parse_quote!{()}),
-                ArmEnd::Break
-            ),
-            Expr::Block(block) => ( todo!("block unimplemented!") ),
+            Expr::Break(_) => (Box::new(parse_quote!{()}), ArmEnd::Break),
+            Expr::Block(mut block_expr) => {
+                match block_expr.block.stmts.last() {
+                    Some(syn::Stmt::Expr(Expr::Break(_)))
+                    | Some(syn::Stmt::Semi(Expr::Break(_), _)) => {
+                        let _ = block_expr.block.stmts.pop();
+                        // remove semicolon from second-last statement
+                        match block_expr.block.stmts.pop() {
+                            Some(syn::Stmt::Semi(expr, _)) => {
+                                block_expr.block.stmts.push(syn::Stmt::Expr(expr));
+                            },
+                            // push non-semis back into the vec
+                            Some(other) => block_expr.block.stmts.push(other),
+                            None => {},
+                        }
+                        (Box::new(Expr::Block(block_expr)), ArmEnd::Break)
+                    },
+                    _ => (Box::new(Expr::Block(block_expr)), ArmEnd::FallThru),
+                }
+            },
             other => (Box::new(other), ArmEnd::FallThru),
         }
     }
 }
-
-// fn rewrite_fallthrough(syn::ExprMatch { expr, arms, .. }: &syn::ExprMatch) -> syn::ExprBlock {
-//     dbg!(expr);
-//     fold_arms(&arms);
-//     todo!();
-// }
-//
-// fn fold_arms(arms: &Vec<syn::Arm>) {
-//     let mut pattern_chain = syn::punctuated::Punctuated::<syn::Pat, syn::token::Or>::new();
-//     // let mut new_matches = Vec::with_capacity(arms.len());
-//     for arm in arms {
-//         pattern_chain.push(arm.pat.clone());
-//         dbg!(&pattern_chain);
-//         dbg!(arm);
-//     }
-//     //dbg!(arms);
-// }
