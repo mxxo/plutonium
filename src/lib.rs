@@ -184,10 +184,11 @@ pub fn unby(_attr: TokenStream, item: TokenStream) -> TokenStream {
 ///     match *boxxx {
 ///         13 => { "13"; break; },
 ///         14 => "14",
-///         _ => "",
+///         _ => "lol",
 ///     }
 /// }
 /// assert_eq!(speaker(Box::new(13)), "13");
+/// assert_eq!(speaker(Box::new(14)), "lol");
 /// ```
 ///
 /// ## Behold, the revenant:
