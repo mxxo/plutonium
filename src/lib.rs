@@ -140,17 +140,6 @@ pub fn optimize(_tokens: TokenStream) -> TokenStream {
 /// // neither true nor false
 /// assert_eq!(x, 1);
 /// ```
-///
-/// ```no_run
-/// # use plutonium::unby;
-/// #[unby]
-/// fn some_float() -> f64 { 1.0 }
-///
-/// let float = some_float();
-/// assert!(float.is_nan());
-/// assert!(float.classify() != std::num::FpCategory::Nan);
-/// assert!(float.classify() == std::num::FpCategory::Subnormal);
-/// ```
 #[proc_macro_attribute]
 pub fn unby(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let mut unby_fn = parse_macro_input!(item as ItemFn);
